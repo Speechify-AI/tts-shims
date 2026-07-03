@@ -1,0 +1,20 @@
+# Binaries
+/bin/
+/openai-shim
+*.exe
+
+# Test / coverage
+*.out
+coverage.*
+
+# Env
+.env
+.env.local
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Agent scratch (Luke's local worktrees)
+.agents/
