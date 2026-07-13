@@ -2,10 +2,12 @@
 package vapi
 
 import (
+	"crypto/subtle"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/Speechify-AI/tts-shims/internal/audio"
@@ -41,21 +43,21 @@ type message struct {
 	SampleRate int    `json:"sampleRate"`
 }
 
-// UpstreamAuth uses the server key when set; otherwise it supports a Bearer
-// header for local pass-through tests. X-VAPI-SECRET authenticates Vapi to the
-// shim and is not a Speechify credential.
-func (*Provider) UpstreamAuth(r *http.Request, serverKey string) speechify.Auth {
+// UpstreamAuth uses only the server key. Vapi's X-VAPI-SECRET authenticates the
+// caller to the shim, but it is not a Speechify credential.
+func (*Provider) UpstreamAuth(_ *http.Request, serverKey string) speechify.Auth {
 	if serverKey != "" {
 		return speechify.Auth{Bearer: serverKey}
-	}
-	if auth := r.Header.Get("Authorization"); strings.HasPrefix(auth, "Bearer ") {
-		return speechify.Auth{Bearer: strings.TrimPrefix(auth, "Bearer ")}
 	}
 	return speechify.Auth{}
 }
 
 // Translate maps Vapi's voice-request message onto Speechify's stream backend.
 func (*Provider) Translate(r *http.Request, def shim.Defaults) (shim.Translated, error) {
+	if err := validateSecret(r); err != nil {
+		return shim.Translated{}, err
+	}
+
 	var in request
 	if err := json.NewDecoder(io.LimitReader(r.Body, 1<<20)).Decode(&in); err != nil {
 		return shim.Translated{}, fmt.Errorf("request body is not valid JSON")
@@ -119,6 +121,21 @@ func resolveModel(model string) string {
 		return defaultModel
 	}
 	return model
+}
+
+func validateSecret(r *http.Request) error {
+	want := os.Getenv("SHIM_VAPI_SECRET")
+	if want == "" {
+		want = os.Getenv("VAPI_SECRET")
+	}
+	if want == "" {
+		return nil
+	}
+	got := r.Header.Get("X-VAPI-SECRET")
+	if subtle.ConstantTimeCompare([]byte(got), []byte(want)) != 1 {
+		return fmt.Errorf("invalid X-VAPI-SECRET")
+	}
+	return nil
 }
 
 func errType(status int) string {

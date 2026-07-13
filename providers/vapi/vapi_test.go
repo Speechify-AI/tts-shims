@@ -68,3 +68,43 @@ func TestTranslateRejectsUnsupportedSampleRate(t *testing.T) {
 		t.Fatalf("err = %v, want sampleRate error", err)
 	}
 }
+
+func TestTranslateValidatesConfiguredSecret(t *testing.T) {
+	t.Setenv("VAPI_SECRET", "expected-secret")
+	req := httptest.NewRequest("POST", "/synthesize", strings.NewReader(`{"message":{"type":"voice-request","text":"hi","sampleRate":24000}}`))
+	req.Header.Set("X-VAPI-SECRET", "expected-secret")
+
+	if _, err := (&Provider{}).Translate(req, shim.Defaults{Model: "simba-english"}); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestTranslateRejectsInvalidConfiguredSecret(t *testing.T) {
+	t.Setenv("VAPI_SECRET", "expected-secret")
+	req := httptest.NewRequest("POST", "/synthesize", strings.NewReader(`{"message":{"type":"voice-request","text":"hi","sampleRate":24000}}`))
+	req.Header.Set("X-VAPI-SECRET", "wrong-secret")
+
+	_, err := (&Provider{}).Translate(req, shim.Defaults{Model: "simba-english"})
+	if err == nil || !strings.Contains(err.Error(), "X-VAPI-SECRET") {
+		t.Fatalf("err = %v, want X-VAPI-SECRET error", err)
+	}
+}
+
+func TestTranslateRejectsMissingConfiguredSecret(t *testing.T) {
+	t.Setenv("SHIM_VAPI_SECRET", "expected-secret")
+	req := httptest.NewRequest("POST", "/synthesize", strings.NewReader(`{"message":{"type":"voice-request","text":"hi","sampleRate":24000}}`))
+
+	_, err := (&Provider{}).Translate(req, shim.Defaults{Model: "simba-english"})
+	if err == nil || !strings.Contains(err.Error(), "X-VAPI-SECRET") {
+		t.Fatalf("err = %v, want X-VAPI-SECRET error", err)
+	}
+}
+
+func TestUpstreamAuthDoesNotPassThroughVapiCallerCredentials(t *testing.T) {
+	req := httptest.NewRequest("POST", "/synthesize", nil)
+	req.Header.Set("Authorization", "Bearer caller-token")
+
+	if auth := (&Provider{}).UpstreamAuth(req, ""); auth.Bearer != "" {
+		t.Fatalf("bearer = %q, want empty", auth.Bearer)
+	}
+}

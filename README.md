@@ -34,7 +34,7 @@ Speechify key server-side); stream providers also support pass-through auth.
 | Cartesia | `cartesia` | `POST /tts/bytes` | `X-API-Key` | `output_format` object |
 | AWS Polly | `awspolly` | `POST /v1/speech` | SigV4 (not verified) | `OutputFormat`+`SampleRate` |
 | Deepgram Aura | `deepgram` | `POST /v1/speak` | `Authorization: Token` | `encoding`/`container` query |
-| Vapi custom voice | `vapi` | `POST /synthesize` | `X-VAPI-SECRET` (shim-to-client), server `SPEECHIFY_API_KEY` upstream | `message.sampleRate` body |
+| Vapi custom voice | `vapi` | `POST /synthesize` | `X-VAPI-SECRET` (caller-to-shim), server `SPEECHIFY_API_KEY` upstream | `message.sampleRate` body |
 | Rime | `rime` | `POST /v1/rime-tts` | `Authorization: Bearer` | `Accept` header |
 | LMNT | `lmnt` | `POST /v1/ai/speech/bytes` | `X-API-Key` | `format` body |
 | Hume | `hume` | `POST /v0/tts/file` | `X-Hume-Api-Key` | `format.type` body |
@@ -83,8 +83,10 @@ Vapi's custom-voice webhook is its own inbound dialect, not an OpenAI-compatible
 request. Point `voice.server.url` at the deployed `vapi` shim's `/synthesize`
 route. Vapi sends `{"message":{"type":"voice-request","text":"...","sampleRate":24000}}`
 and the shim returns raw mono 16-bit little-endian PCM as `application/octet-stream`.
-Set Vapi to request `sampleRate: 24000` unless you have verified another rate in
-your deployment path.
+Set `VAPI_SECRET` or `SHIM_VAPI_SECRET` on the shim to require Vapi's
+`X-VAPI-SECRET` header before any upstream synthesis call. Set Vapi to request
+`sampleRate: 24000` unless you have verified another rate in your deployment
+path.
 
 ### WAV note
 
@@ -121,6 +123,7 @@ Every binary reads the same environment (see [`.env.example`](./.env.example)):
 | `SPEECHIFY_VERSION` | *(empty)* | Optional `Speechify-Version` pin. |
 | `SHIM_DEFAULT_MODEL` | `simba-english` | Fallback Speechify model. |
 | `SHIM_REQUEST_TIMEOUT` | `30s` | Per-request upstream timeout. |
+| `VAPI_SECRET` / `SHIM_VAPI_SECRET` | *(empty)* | Optional shared secret required on `X-VAPI-SECRET` by the `vapi` provider. |
 
 `GET /healthz` returns `200 ok`.
 
