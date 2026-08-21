@@ -33,7 +33,7 @@ func (p streamProvider) Translate(r *http.Request, def shim.Defaults) (shim.Tran
 		return shim.Translated{}, errBad("text required")
 	}
 	return shim.Translated{
-		Request: speechify.Request{Input: body.Text, VoiceID: "george", Model: def.Model, OutputFormat: p.format.OutputFormat},
+		Request: speechify.Request{Input: body.Text, VoiceID: "geffen_32", Model: def.Model, OutputFormat: p.format.OutputFormat},
 		Format:  p.format,
 		Backend: shim.BackendStream,
 	}, nil
@@ -57,7 +57,7 @@ func (speechProvider) UpstreamAuth(_ *http.Request, k string) speechify.Auth {
 }
 func (speechProvider) Translate(r *http.Request, def shim.Defaults) (shim.Translated, error) {
 	return shim.Translated{
-		Request: speechify.Request{Input: "hi", VoiceID: "george", AudioFormat: "mp3"},
+		Request: speechify.Request{Input: "hi", VoiceID: "geffen_32", AudioFormat: "mp3"},
 		Format:  audio.MP3(24000, 128),
 		Backend: shim.BackendSpeech,
 	}, nil
@@ -76,7 +76,7 @@ func (b badErr) Error() string { return string(b) }
 func errBad(s string) error    { return badErr(s) }
 
 func cfg(url string) config.Config {
-	return config.Config{UpstreamBaseURL: url, APIKey: "sk_server", DefaultModel: "simba-english", RequestTimeout: 5_000_000_000}
+	return config.Config{UpstreamBaseURL: url, APIKey: "sk_server", DefaultModel: "simba-3.2", RequestTimeout: 5_000_000_000}
 }
 
 func TestStreamBackendPassesThroughAndWrapsWAV(t *testing.T) {

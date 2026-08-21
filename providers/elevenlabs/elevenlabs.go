@@ -37,10 +37,10 @@ type request struct {
 }
 
 var modelAliases = map[string]string{
-	"eleven_v3": "simba-english", "eleven_multilingual_v2": "simba-multilingual",
-	"eleven_multilingual_v1": "simba-multilingual", "eleven_flash_v2_5": "simba-english",
-	"eleven_flash_v2": "simba-english", "eleven_turbo_v2_5": "simba-english",
-	"eleven_turbo_v2": "simba-english", "eleven_monolingual_v1": "simba-english",
+	"eleven_v3": "simba-3.2", "eleven_multilingual_v2": "simba-3.0",
+	"eleven_multilingual_v1": "simba-3.0", "eleven_flash_v2_5": "simba-3.2",
+	"eleven_flash_v2": "simba-3.2", "eleven_turbo_v2_5": "simba-3.2",
+	"eleven_turbo_v2": "simba-3.2", "eleven_monolingual_v1": "simba-3.2",
 }
 
 // UpstreamAuth uses the server key when set; otherwise forwards the caller's

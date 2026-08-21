@@ -121,7 +121,7 @@ Every binary reads the same environment (see [`.env.example`](./.env.example)):
 | `SHIM_ADDR` | `:8080` | Listen address. |
 | `SPEECHIFY_BASE_URL` | `https://api.speechify.ai` | Upstream base URL. |
 | `SPEECHIFY_VERSION` | *(empty)* | Optional `Speechify-Version` pin. |
-| `SHIM_DEFAULT_MODEL` | `simba-english` | Fallback Speechify model. |
+| `SHIM_DEFAULT_MODEL` | `simba-3.2` | Fallback Speechify model. |
 | `SHIM_REQUEST_TIMEOUT` | `30s` | Per-request upstream timeout. |
 | `VAPI_SECRET` / `SHIM_VAPI_SECRET` | *(empty)* | Optional shared secret required on `X-VAPI-SECRET` by the `vapi` provider. |
 

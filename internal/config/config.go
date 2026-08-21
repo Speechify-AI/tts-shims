@@ -46,7 +46,7 @@ func Load() (Config, error) {
 		UpstreamBaseURL:   strings.TrimRight(getenv("SPEECHIFY_BASE_URL", "https://api.speechify.ai"), "/"),
 		APIKey:            os.Getenv("SPEECHIFY_API_KEY"),
 		SpeechifyVersion:  os.Getenv("SPEECHIFY_VERSION"),
-		DefaultModel:      getenv("SHIM_DEFAULT_MODEL", "simba-english"),
+		DefaultModel:      getenv("SHIM_DEFAULT_MODEL", "simba-3.2"),
 		RequestTimeout:    30 * time.Second,
 		ReadHeaderTimeout: 10 * time.Second,
 		ShutdownTimeout:   15 * time.Second,

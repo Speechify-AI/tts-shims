@@ -36,13 +36,13 @@ type request struct {
 }
 
 var voiceAliases = map[string]string{
-	"alloy": "george", "ash": "george", "ballad": "george", "coral": "george",
-	"echo": "george", "fable": "george", "nova": "george", "onyx": "george",
-	"sage": "george", "shimmer": "george", "verse": "george", "marin": "george", "cedar": "george",
+	"alloy": "geffen_32", "ash": "geffen_32", "ballad": "geffen_32", "coral": "geffen_32",
+	"echo": "geffen_32", "fable": "geffen_32", "nova": "geffen_32", "onyx": "geffen_32",
+	"sage": "geffen_32", "shimmer": "geffen_32", "verse": "geffen_32", "marin": "geffen_32", "cedar": "geffen_32",
 }
 
 var modelAliases = map[string]string{
-	"tts-1": "simba-english", "tts-1-hd": "simba-english", "gpt-4o-mini-tts": "simba-english",
+	"tts-1": "simba-3.2", "tts-1-hd": "simba-3.2", "gpt-4o-mini-tts": "simba-3.2",
 }
 
 // UpstreamAuth uses the server key when set; otherwise forwards the caller's
@@ -100,7 +100,7 @@ func (*Provider) WriteError(w http.ResponseWriter, status int, message string) {
 
 func resolveVoice(voice string, _ shim.Defaults) string {
 	if voice == "" {
-		return "george"
+		return "geffen_32"
 	}
 	if id, ok := voiceAliases[strings.ToLower(voice)]; ok {
 		return id

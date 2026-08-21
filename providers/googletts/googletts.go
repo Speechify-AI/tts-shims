@@ -103,7 +103,7 @@ func (*Provider) WriteError(w http.ResponseWriter, status int, message string) {
 
 func voiceID(name string) string {
 	if name == "" {
-		return "george"
+		return "geffen_32"
 	}
 	return name
 }

@@ -60,7 +60,7 @@ func (*Provider) Translate(r *http.Request, def shim.Defaults) (shim.Translated,
 	return shim.Translated{
 		Request: speechify.Request{
 			Input:        ssml.WrapSpeed(in.Text, nil),
-			VoiceID:      "george",
+			VoiceID:      "geffen_32",
 			Model:        def.Model,
 			OutputFormat: format.OutputFormat,
 		},

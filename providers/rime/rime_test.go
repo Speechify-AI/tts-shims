@@ -10,23 +10,23 @@ import (
 
 func TestProviderModelIDDoesNotLeakToSpeechify(t *testing.T) {
 	req := httptest.NewRequest("POST", "/v1/rime-tts",
-		strings.NewReader(`{"speaker":"george","text":"hi","modelId":"mistv2"}`))
-	tr, err := (&Provider{}).Translate(req, shim.Defaults{Model: "simba-english"})
+		strings.NewReader(`{"speaker":"geffen_32","text":"hi","modelId":"mistv2"}`))
+	tr, err := (&Provider{}).Translate(req, shim.Defaults{Model: "simba-3.2"})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if tr.Request.Model != "simba-english" {
-		t.Errorf("model = %q, want simba-english (mistv2 must not leak)", tr.Request.Model)
+	if tr.Request.Model != "simba-3.2" {
+		t.Errorf("model = %q, want simba-3.2 (mistv2 must not leak)", tr.Request.Model)
 	}
-	if tr.Request.VoiceID != "george" {
-		t.Errorf("voice_id = %q, want george", tr.Request.VoiceID)
+	if tr.Request.VoiceID != "geffen_32" {
+		t.Errorf("voice_id = %q, want geffen_32", tr.Request.VoiceID)
 	}
 }
 
 func TestNativeSpeechifyModelPassesThrough(t *testing.T) {
 	req := httptest.NewRequest("POST", "/v1/rime-tts",
-		strings.NewReader(`{"speaker":"george","text":"hi","modelId":"simba-3.0"}`))
-	tr, _ := (&Provider{}).Translate(req, shim.Defaults{Model: "simba-english"})
+		strings.NewReader(`{"speaker":"geffen_32","text":"hi","modelId":"simba-3.0"}`))
+	tr, _ := (&Provider{}).Translate(req, shim.Defaults{Model: "simba-3.2"})
 	if tr.Request.Model != "simba-3.0" {
 		t.Errorf("model = %q, want simba-3.0", tr.Request.Model)
 	}
@@ -34,9 +34,9 @@ func TestNativeSpeechifyModelPassesThrough(t *testing.T) {
 
 func TestAcceptHeaderSelectsFormat(t *testing.T) {
 	req := httptest.NewRequest("POST", "/v1/rime-tts",
-		strings.NewReader(`{"speaker":"george","text":"hi","samplingRate":16000}`))
+		strings.NewReader(`{"speaker":"geffen_32","text":"hi","samplingRate":16000}`))
 	req.Header.Set("Accept", "audio/wav")
-	tr, _ := (&Provider{}).Translate(req, shim.Defaults{Model: "simba-english"})
+	tr, _ := (&Provider{}).Translate(req, shim.Defaults{Model: "simba-3.2"})
 	if tr.Format.ContentType != "audio/wav" {
 		t.Errorf("content-type = %q, want audio/wav", tr.Format.ContentType)
 	}
