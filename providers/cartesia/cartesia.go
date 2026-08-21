@@ -120,7 +120,7 @@ func (*Provider) WriteError(w http.ResponseWriter, status int, message string) {
 }
 
 var speechifyModels = map[string]struct{}{
-	"simba-english": {}, "simba-multilingual": {}, "simba-3.0": {},
+	"simba-3.2": {}, "simba-3.0": {},
 }
 
 func resolveModel(model, fallback string) string {

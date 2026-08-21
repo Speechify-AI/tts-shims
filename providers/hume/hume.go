@@ -117,7 +117,7 @@ func joinedText(utterances []utterance) (string, error) {
 
 func resolveVoice(voice *voiceField) string {
 	if voice == nil {
-		return "george"
+		return "geffen_32"
 	}
 	if voice.ID != "" {
 		return voice.ID
@@ -125,7 +125,7 @@ func resolveVoice(voice *voiceField) string {
 	if voice.Name != "" {
 		return voice.Name
 	}
-	return "george"
+	return "geffen_32"
 }
 
 func resolveFormat(format *formatField) (audio.Format, error) {

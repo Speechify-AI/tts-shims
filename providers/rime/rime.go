@@ -102,7 +102,7 @@ func resolveFormat(accept string, sampleRate int) audio.Format {
 }
 
 var speechifyModels = map[string]struct{}{
-	"simba-english": {}, "simba-multilingual": {}, "simba-3.0": {},
+	"simba-3.2": {}, "simba-3.0": {},
 }
 
 // resolveModel passes through native Speechify models and falls back to the
