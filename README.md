@@ -1,4 +1,4 @@
-# tts-shims
+# SpeechifyAI TTS Shims
 
 A family of tiny, fast HTTP shims that each speak a **third-party TTS provider's
 API** on the front and call **[Speechify](https://docs.speechify.ai)** on the
