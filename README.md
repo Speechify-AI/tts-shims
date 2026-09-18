@@ -142,6 +142,10 @@ docker build --build-arg PROVIDER=openai -t speechify-ai/openai-shim .
 docker run --rm -p 8080:8080 -e SPEECHIFY_API_KEY=sk_your_key speechify-ai/openai-shim
 ```
 
+## Support
+
+Questions and bugs: [open an issue](https://github.com/Speechify-AI/tts-shims/issues) or write to `devrel@speechify.com`. The shims are a customer-run binary; Speechify does not host them. The [Vapi](https://docs.speechify.ai/build/guides/integrations/vapi) and [Deepgram](https://docs.speechify.ai/build/guides/integrations/deepgram) integration guides are the supported paths.
+
 ## License
 
 [MIT](./LICENSE)
